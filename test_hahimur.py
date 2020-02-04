@@ -19,11 +19,12 @@ class TournamentsTests(TestCase):
     def create_app(self):
         """Define test variables and initialize app."""
         return app
-        
+
     def setUp(self):
         db.create_all()
 
     def test_insert(self):
+        """Inserting successfully should return 200 and the correct location header"""
         t = {
             "name": "Euro 2020",
         }
@@ -37,8 +38,12 @@ class TournamentsTests(TestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertIn('Location', response.headers)
+        self.assertEqual(
+            response.headers["Location"], f"http://localhost/tournaments/1"
+        )
 
-    def test_insert_without_name(self):
+    def test_insert_with_bad_data(self):
+        """Bad post data should return a 400"""
         t = {
             "no_name": "Euro 2020",
         }
@@ -54,17 +59,16 @@ class TournamentsTests(TestCase):
         response = app.test_client().get('/tournaments/2')
         self.assert_404(response)
 
-
     def test_existing_tournament(self):
         t = Tournament(name="New Tournament")
         t.insert()
         response = app.test_client().get(f'/tournaments/{t.uid}')
         self.assert_200(response)
 
-    
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 import os
 from app import app
-from flask import jsonify, json, request
+from flask import jsonify, json, request, abort
 from app.models import Tournament
 
 
@@ -13,15 +13,15 @@ def get_tournaments():
 @app.route("/tournaments/<int:uid>", methods=["GET"])
 def get_tournament(uid):
     t = Tournament.query.get_or_404(uid)
-    return jsonify({
-        "id": t.uid,
-        "name": t.name
-    })
+    return jsonify(t.to_dict())
 
 
 @app.route("/tournaments", methods=["POST"])
 def create_tournament():
-    name = request.json["name"]
+    try:
+        name = request.json["name"]
+    except KeyError:
+        abort(400)
     t = Tournament(name=name)
     t.insert()
     response = jsonify()
@@ -36,6 +36,10 @@ def error_handler(status_code=404, message=""):
         "message": message,
     }), status_code
 
+
+@app.errorhandler(400)
+def bad_request(error):
+    return error_handler(400, "Bad Request")
 
 @app.errorhandler(404)
 def not_found(error):

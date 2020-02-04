@@ -1,7 +1,7 @@
 import os
 from app import app
 from flask import jsonify, json, request, abort
-from app.models import Tournament
+from app.models import Tournament, Team
 
 
 @app.route("/tournaments", methods=["GET"])
@@ -39,6 +39,22 @@ def delete_tournament(uid):
         abort(422)
 
     return jsonify({}), 204
+
+
+@app.route("/teams", methods=["POST"])
+def insert_team():
+    try:
+        name = request.json["name"]
+        flag = request.json["flag"]
+    except KeyError:
+        abort(400)
+
+    t = Team(name=name, flag=flag)
+    t.insert()
+    response = jsonify()
+    response.status_code = 201
+    response.headers["location"] = f"/teams/{t.uid}"
+    return response
 
 
 def error_handler(status_code, message):

@@ -24,7 +24,8 @@ class TournamentsTests(TestCase):
         db.create_all()
 
     def test_insert(self):
-        """Inserting successfully should return 200 and the correct location header"""
+        """Inserting successfully should return 200 and the correct location
+        header"""
         t = {
             "name": "Euro 2020",
         }
@@ -54,6 +55,27 @@ class TournamentsTests(TestCase):
         )
 
         self.assert400(response)
+        self.assertEqual(response.json["message"], "Bad Request")
+
+    def test_deletion(self):
+        """Deleting should return an empty body and 204"""
+        t = Tournament(name="Euro 2020")
+        t.insert()
+        response = app.test_client().delete(
+            f'/tournaments/{t.uid}',
+        )
+
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.data, b'')
+
+    def test_wrong_deletion(self):
+        """Deleting a non existing uid returns 422"""
+        response = app.test_client().delete(
+            '/tournaments/1',
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json["message"], "unprocessable entity")
 
     def test_non_existing_tournament(self):
         response = app.test_client().get('/tournaments/2')
@@ -63,6 +85,14 @@ class TournamentsTests(TestCase):
         t = Tournament(name="New Tournament")
         t.insert()
         response = app.test_client().get(f'/tournaments/{t.uid}')
+        self.assert_200(response)
+
+    def test_method_not_allowed(self):
+        response = app.test_client().post(f'/tournaments/1')
+        self.assert_405(response)
+
+    def test_get_tournaments(self):
+        response = app.test_client().get(f'/tournaments')
         self.assert_200(response)
 
     def tearDown(self):

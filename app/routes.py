@@ -10,12 +10,6 @@ def get_tournaments():
     return jsonify(tournaments)
 
 
-@app.route("/tournaments/<int:uid>", methods=["GET"])
-def get_tournament(uid):
-    t = Tournament.query.get_or_404(uid)
-    return jsonify(t.to_dict())
-
-
 @app.route("/tournaments", methods=["POST"])
 def create_tournament():
     try:
@@ -30,7 +24,24 @@ def create_tournament():
     return response
 
 
-def error_handler(status_code=404, message=""):
+@app.route("/tournaments/<int:uid>", methods=["GET"])
+def get_tournament(uid):
+    t = Tournament.query.get_or_404(uid)
+    return jsonify(t.to_dict())
+
+
+@app.route("/tournaments/<int:uid>", methods=["DELETE"])
+def delete_tournament(uid):
+    t = Tournament.query.filter_by(uid=uid).first()
+    try:
+        t.delete()
+    except:
+        abort(422)
+
+    return jsonify({}), 204
+
+
+def error_handler(status_code, message):
     return jsonify({
         "error": status_code,
         "message": message,
@@ -41,9 +52,20 @@ def error_handler(status_code=404, message=""):
 def bad_request(error):
     return error_handler(400, "Bad Request")
 
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return error_handler(405, "method now allowed")
+
+
 @app.errorhandler(404)
 def not_found(error):
     return error_handler(404, "resource not found")
+
+
+@app.errorhandler(422)
+def unprocessable_entity(error):
+    return error_handler(422, "unprocessable entity")
 
 
 @app.errorhandler(500)

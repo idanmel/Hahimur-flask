@@ -8,6 +8,10 @@ class Tournament(db.Model):
     def __repr__(self):
         return '<Tournament(name={})>'.format(self.name)
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def insert(self):
         db.session.add(self)
         db.session.commit()

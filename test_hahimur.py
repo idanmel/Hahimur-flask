@@ -8,7 +8,7 @@ from flask_testing import TestCase
 from config import Config
 from hahimur import app
 from app import db
-from app.models import Tournament
+from app.models import Tournament, Team
 
 
 class TournamentsTests(TestCase):
@@ -98,6 +98,32 @@ class TeamsTests(TestCase):
         self.assertEqual(
             response.headers["Location"], f"http://localhost/teams/1"
         )
+
+    def test_patch_team(self):
+        team = Team(name="England", flag="http://url_to_flag.png")
+        team.insert()
+
+        new_flag = {"flag": "http://different_url_to_flag.png"}
+        response = app.test_client().patch(
+            f'/teams/{team.uid}',
+            data=json.dumps(new_flag),
+            content_type='application/json'
+        )
+
+        team = Team.query.get_or_404(team.uid)
+
+        self.assertEqual(team.flag, "http://different_url_to_flag.png")
+        self.assertEqual(response.status_code, 204)
+
+    def test_get_team(self):
+        team = Team(name="England", flag="http://url_to_flag.png")
+        team.insert()
+
+        response = app.test_client().get(f'/teams/{team.uid}')
+
+        self.assert_200(response)
+        self.assertEqual(team.name, response.json['name'])
+        self.assertEqual(team.flag, response.json['flag'])
 
     def tearDown(self):
         db.session.remove()

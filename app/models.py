@@ -39,6 +39,15 @@ class Team(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def update(self, name=None, flag=None):
+        if name:
+            self.name = name
+
+        if flag:
+            self.flag = flag
+
+        db.session.commit()
+
     def to_dict(self):
         return {
             'uid': self.uid,

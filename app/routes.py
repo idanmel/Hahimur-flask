@@ -57,9 +57,21 @@ def insert_team():
     return response
 
 
-# @app.route("/teams/<int:uid>", methods=["PATCH"])
-# def update_team(uid):
-#     t = Tournament.query.filter_by(uid=uid).first()
+@app.route("/teams/<int:uid>", methods=["GET"])
+def get_team(uid):
+    team = Team.query.get_or_404(uid)
+    return jsonify(team.to_dict())
+
+
+@app.route("/teams/<int:uid>", methods=["PATCH"])
+def update_team(uid):
+    team = Team.query.get_or_404(uid)
+    name = request.json.get("name")
+    flag = request.json.get("flag")
+
+    team.update(name=name, flag=flag)
+
+    return jsonify({}), 204
 
 
 def error_handler(status_code, message):

@@ -49,12 +49,17 @@ def insert_team():
     except KeyError:
         abort(400)
 
-    t = Team(name=name, flag=flag)
-    t.insert()
+    team = Team(name=name, flag=flag)
+    team.insert()
     response = jsonify()
     response.status_code = 201
-    response.headers["location"] = f"/teams/{t.uid}"
+    response.headers["location"] = f"/teams/{team.uid}"
     return response
+
+
+# @app.route("/teams/<int:uid>", methods=["PATCH"])
+# def update_team(uid):
+#     t = Tournament.query.filter_by(uid=uid).first()
 
 
 def error_handler(status_code, message):

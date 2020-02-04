@@ -71,6 +71,7 @@ class TeamsTests(TestCase):
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     TESTING = True
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
 
     def create_app(self):
         """Define test variables and initialize app."""
@@ -82,13 +83,13 @@ class TeamsTests(TestCase):
     def test_insert_team(self):
         """Inserting successfully should return 200 and the correct location
         header"""
-        t = {
+        team = {
             "name": "England",
             "flag": "http://usrl_to_flag.png"
         }
         response = app.test_client().post(
             '/teams',
-            data=json.dumps(t),
+            data=json.dumps(team),
             content_type='application/json'
         )
 
@@ -116,7 +117,7 @@ class ErrorsTests(TestCase):
         db.create_all()
 
     def test_non_existing_page(self):
-        response = app.test_client().get('/not-here')
+        response = app.test_client().get('/tournaments/5')
         self.assert_404(response)
 
     def test_method_not_allowed(self):

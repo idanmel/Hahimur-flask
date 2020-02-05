@@ -1,4 +1,3 @@
-import os
 import unittest
 
 from flask import Flask, json
@@ -13,10 +12,11 @@ from app.models import Tournament, Team
 
 class ApiTest(TestCase):
     """The class which all test case classes should inherit from"""
-    TESTING = True
 
     def create_app(self):
         """Define test variables and initialize app."""
+        app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
+        app.config["TESTING"] = True
         return app
 
     def setUp(self):

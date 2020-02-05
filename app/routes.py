@@ -2,16 +2,19 @@ import os
 from app import app
 from flask import jsonify, json, request, abort
 from app.models import Tournament, Team
+from app.auth import requires_auth, AuthError
 
 
 @app.route("/tournaments", methods=["GET"])
-def get_tournaments():
+@requires_auth('get:tournaments')
+def get_tournaments(permission):
     tournaments = [t.to_dict() for t in Tournament.query.all()]
     return jsonify(tournaments)
 
 
 @app.route("/tournaments", methods=["POST"])
-def create_tournament():
+@requires_auth('post:tournaments')
+def create_tournament(permission):
     try:
         name = request.json["name"]
     except KeyError:
@@ -25,13 +28,15 @@ def create_tournament():
 
 
 @app.route("/tournaments/<int:uid>", methods=["GET"])
-def get_tournament(uid):
+@requires_auth('get:tournaments')
+def get_tournament(permission, uid):
     t = Tournament.query.get_or_404(uid)
     return jsonify(t.to_dict())
 
 
 @app.route("/tournaments/<int:uid>", methods=["DELETE"])
-def delete_tournament(uid):
+@requires_auth('delete:tournaments')
+def delete_tournament(permission, uid):
     t = Tournament.query.filter_by(uid=uid).first()
     try:
         t.delete()
@@ -42,7 +47,8 @@ def delete_tournament(uid):
 
 
 @app.route("/teams", methods=["POST"])
-def insert_team():
+@requires_auth('post:teams')
+def insert_team(permission):
     try:
         name = request.json["name"]
         flag = request.json["flag"]
@@ -58,13 +64,15 @@ def insert_team():
 
 
 @app.route("/teams/<int:uid>", methods=["GET"])
-def get_team(uid):
+@requires_auth('get:teams')
+def get_team(permission, uid):
     team = Team.query.get_or_404(uid)
     return jsonify(team.to_dict())
 
 
 @app.route("/teams/<int:uid>", methods=["PATCH"])
-def update_team(uid):
+@requires_auth('patch:teams')
+def update_team(permission, uid):
     team = Team.query.get_or_404(uid)
     name = request.json.get("name")
     flag = request.json.get("flag")
@@ -82,8 +90,13 @@ def error_handler(status_code, message):
 
 
 @app.errorhandler(400)
-def bad_request(error):
-    return error_handler(400, "Bad Request")
+def bad_request(error, message="Bad Request"):
+    return error_handler(400, message)
+
+
+@app.errorhandler(401)
+def unauthorized(error, message="Unauthorized"):
+    return error_handler(401, message)
 
 
 @app.errorhandler(405)
@@ -104,3 +117,9 @@ def unprocessable_entity(error):
 @app.errorhandler(500)
 def server_error(error):
     return error_handler(500, "internal server error")
+
+
+@app.errorhandler(AuthError)
+def auth_error(ae):
+    return error_handler(status_code=ae.status_code,
+                         message=ae.error.get("description", ""))

@@ -29,9 +29,9 @@ class ApiTest(TestCase):
 
 class TournamentsTests(ApiTest):
 
-    ####################
-    ### INSERT TESTS ###
-    ####################
+    ##################
+    ### POST TESTS ###
+    ##################
     def test_insert_trounament(self):
         """Inserting successfully should return 200 and the correct location
         header"""
@@ -101,8 +101,12 @@ class TournamentsTests(ApiTest):
         self.assert404(response)
 
     def test_get_tournaments(self):
+        t = Tournament(name="New Tournament")
+        t.insert()
         response = app.test_client().get(f'/tournaments')
         self.assert200(response)
+        self.assertEqual(len(response.json), 1)
+        self.assertEqual(response.json[0]["name"], "New Tournament")
 
 
 class TeamsTests(ApiTest):
@@ -176,6 +180,9 @@ class TeamsTests(ApiTest):
 
         self.assert404(response)
 
+    #################
+    ### GET TESTS ###
+    #################
     def test_get_team(self):
         team = Team(name="England", flag="http://url_to_flag.png")
         team.insert()

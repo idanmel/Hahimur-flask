@@ -4,14 +4,14 @@ Backend for Hahimur
 ## Why "Hahimur"?
 On every major football tournament, my friends and I are trying to predict the outcomes.
 We usually use excel sheets to do it, and I decided to create a website for us.
-For the front-end I'm using Elm, and you can see the first part of it, the form to fill, [here](https://hahimur.com).
+For the front-end I'm using Elm, and you can see the first part of it, where you can start creating you predictions, [here](https://hahimur.com).
 
 ## Live URL
 https://hahimur-api.herokuapp.com/
 
 ## Installation
 
-Clone the repository, then create a virtualenv, preferably with python3.7.6, install all the dependencies.
+Clone the repository, create a virtualenv, preferably with python3.7.6, and install all the dependencies.
 
 ```bash
 git clone git@github.com:idanmel/Hahimur-flask.git
@@ -126,3 +126,18 @@ Patch  '/teams/<int>'
 - ContentType: 'application/json'
 - Data: an object containing "name", "flag", or both.
 - Returns: 204 with an empty body
+
+
+## Tokens for calling the live site:
+
+#### Admin Token
+```
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik4wTTBOamhHUVRoRVJVUTVOVUpGUWtFMk5USkNOVEJCTURRelJFUkNNVGRGT0VWRE1rSTJOQSJ9.eyJpc3MiOiJodHRwczovL2lkYW5tZWwuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA4NDI2ODEzNDI4NDAyMjA2OTkyIiwiYXVkIjpbImh0dHBzOi8vaGFoaW11ci5jb20iLCJodHRwczovL2lkYW5tZWwuZXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4MDk0ODQ5MCwiZXhwIjoxNTgxMDM0ODkwLCJhenAiOiJMMlIzalVGaVRaRkptYXZ3VGNWUktxaDdMOUVPU0xETiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6dG91cm5hbWVudHMiLCJnZXQ6dGVhbXMiLCJnZXQ6dG91cm5hbWVudHMiLCJwYXRjaDp0ZWFtcyIsInBvc3Q6dGVhbXMiLCJwb3N0OnRvdXJuYW1lbnRzIl19.RUOwEBioIPgZwIjz82uSwLVyJJXbDqEYOaa0ZKBbyhCAL3XZkjVoEKJTCyPfy9CJ52YoPX6BQukiyTZzbgq6REQ90uRtrCy_ZyX8ZkEDBQDXh7uuaNvYmTMCCBB86i_OGFLkvAQlUoxKTfnr8QHa5JR2SjNg9Q5ZBOzNB6RslRLT0UH8TiKuEOmRYYR-fVZHb06rSefSISjzQiNkhKB2ls1KDAQooKSfRaCnKxuJk8JQZGGvTRHkD56UF-_wWiFHqa6cIcc6lUGXzO4RRKiLQZFLlnXLzeFaJZ9Q0hr-z9c5CgV9kcB7oWlFtUxS1pQC6SpKm8hjQoqPaSYr6vAVSg
+```
+
+#### User Token
+```
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik4wTTBOamhHUVRoRVJVUTVOVUpGUWtFMk5USkNOVEJCTURRelJFUkNNVGRGT0VWRE1rSTJOQSJ9.eyJpc3MiOiJodHRwczovL2lkYW5tZWwuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTE3NTQ1MTIzMTkzMzc3NDQzOTQxIiwiYXVkIjpbImh0dHBzOi8vaGFoaW11ci5jb20iLCJodHRwczovL2lkYW5tZWwuZXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4MDk0OTAwOCwiZXhwIjoxNTgxMDM1NDA4LCJhenAiOiJMMlIzalVGaVRaRkptYXZ3VGNWUktxaDdMOUVPU0xETiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6dGVhbXMiLCJnZXQ6dG91cm5hbWVudHMiXX0.QZohgLbFoW7xS7fe80Pq-BzOZA-917188qs2fLH6ktOKNUpGFBwBhK5k122D1GjCz2zUrrCEAZsf8_2eTjvObSAJyNVww6CKZIXY4AwiuHF76rnREDyaOqhF7R2Ns2h8BDPLC8RwbrprI4pBMhvXXfnK3h6BhkrlaYta63RTNzjD8POpbBLnL5-ypm54eNdqaoUA5Fuc6Q8ZSL6ooQ7Cpwh_9YJNlOoYXSPuTsozyV0KWWwAT1kaWrrS4Ql3Vo83H3_6Ev3TJRF2b_iL9b7H8q1Um-J8XaOgpFn1zDJKPJVuVouz97GQE5PgMdmeFLgwQKLVYsq0olJF1AHHRuVbpA
+```
+
+

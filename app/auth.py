@@ -6,9 +6,9 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-AUTH0_DOMAIN = 'idanmel.eu.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'https://hahimur.com'
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
+ALGORITHMS = [os.getenv("ALGORITHMS")]
+API_AUDIENCE = os.getenv("API_AUDIENCE")
 
 # AuthError Exception
 '''
@@ -130,7 +130,7 @@ def requires_auth(permission='', *args, **kwargs):
         @wraps(f)
         def wrapper(*args, **kwargs):
             """If an environment no_auth is specified, skip the authenticaton"""
-            if os.environ.get('no_auth'):
+            if os.environ.get('NO_AUTH'):
                 return f(True, *args, **kwargs)
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)

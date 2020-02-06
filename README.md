@@ -22,8 +22,6 @@ pip install -r requirements.txt
 touch .env
 ```
 
-Create an sql database for Hahimur to work with.
-
 The .env file is where you will place all your environment variables. For example:
 ```
 FLASK_APP=hahimur.py
@@ -35,10 +33,14 @@ API_AUDIENCE=confidentioal
 ALGORITHMS=confidentioal
 ```
 
+## Database
+Create a database, then run
+```bash
+flask db upgrade
+```
+
 ## Running the server locally
 ```bash
-cd Hahimur-flask
-source venv/bin/activate
 flask run
 ```
 

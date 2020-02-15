@@ -5,6 +5,16 @@ from app.models import Tournament, Team
 from app.auth import requires_auth, AuthError
 
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers',
+                         'Content-Type, Authorization, true')
+    response.headers.add('Access-Control-Allow-Methods',
+                         'GET,PATCH,POST,DELETE,OPTIONS')
+
+    return response
+
+
 @app.route("/tournaments", methods=["GET"])
 @requires_auth('get:tournaments')
 def get_tournaments(permission):
